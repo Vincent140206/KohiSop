@@ -166,7 +166,7 @@ public class KohiSop {
                     double pajak = hitungPajak(minuman.getHarga(), true);
                     totalMinuman += harga;
                     totalPajakMinuman += pajak;
-                    System.out.printf("%-10s %-30s %-10d %-10.2f %-10.2f\n", kode, minuman.getNama(), kuantitas, harga, pajak);
+                    System.out.printf("%-10s %-30s %-10d %-10.2f %-10.2f\n", kode.toUpperCase(), minuman.getNama(), kuantitas, harga, pajak);
                 }
             }
         }
@@ -180,7 +180,7 @@ public class KohiSop {
                     double pajak = hitungPajak(makanan.getHarga(), false);
                     totalMakanan += harga;
                     totalPajakMakanan += pajak;
-                    System.out.printf("%-10s %-30s %-10d %-10.2f %-10.2f\n", kode, makanan.getNama(), kuantitas, harga, pajak);
+                    System.out.printf("%-10s %-30s %-10d %-10.2f %-10.2f\n", kode.toUpperCase(), makanan.getNama(), kuantitas, harga, pajak);
                 }
             }
         }
@@ -192,17 +192,27 @@ public class KohiSop {
         System.out.printf("Total Sebelum Pajak: %.2f IDR\n", totalSebelumPajak);
         System.out.printf("Total Pajak: %.2f IDR\n", totalPajak);
         System.out.printf("Total Setelah Pajak: %.2f IDR\n", totalSetelahPajak);
-        System.out.print("Pilih metode pembayaran (1. Tunai, 2. QRIS, 3. eMoney): ");
-        int pilihan = Integer.parseInt(scanner.nextLine().trim());
-        Payment payment = null;
 
-        switch (pilihan) {
-            case 1 -> payment = new ITunai();
-            case 2 -> payment = (Payment) new IQRIS();
-            case 3 -> payment = new IeMoney();
-            default -> {
-                System.out.println("Pilihan tidak valid.");
-                return;
+        Payment payment = null;
+        while (true) {
+            System.out.print("Pilih metode pembayaran (1. Tunai, 2. QRIS, 3. eMoney): ");
+            String input = scanner.nextLine().trim();
+
+            try {
+                int pilihan = Integer.parseInt(input); 
+
+                switch (pilihan) {
+                    case 1 -> payment = new ITunai();
+                    case 2 -> payment = new IQRIS();
+                    case 3 -> payment = new IeMoney();
+                    default -> {
+                        System.out.println("Pilihan tidak valid. Silakan coba lagi.");
+                        continue; 
+                    }
+                }
+                break; 
+            } catch (NumberFormatException e) {
+                System.out.println("Input tidak sesuai. Harap masukkan angka.");
             }
         }
 
