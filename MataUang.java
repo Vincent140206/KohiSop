@@ -11,7 +11,26 @@ public class MataUang {
         nilaiTukar.put("EUR", (double) 14000);
     }
 
-    public static double konversiKeIDR(double jumlah, String mataUang) {
-        return jumlah * nilaiTukar.getOrDefault(mataUang, (double) 1000);
+    public static double konversi(double totalBayar, String mataUang) {
+        return totalBayar / nilaiTukar.getOrDefault(mataUang, 1.0);
+    }
+
+    public static String getSimbolMataUang(String kode) {
+        switch (kode.toUpperCase()) {
+            case "USD":
+                return "$";
+            case "JPY":
+                return "¥";
+            case "MYR":
+                return "RM";
+            case "EUR":
+                return "€";
+            default:
+                return ""; 
+        }
+    }
+
+    public static boolean cekValid(String kode) {
+        return nilaiTukar.containsKey(kode.toUpperCase());
     }
 }

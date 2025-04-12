@@ -22,6 +22,6 @@ public abstract class Menu {
     }
 
     public void tampilkanMenu() {
-        System.out.printf("%-10s %-35s %.2f\n", kode, nama, harga);
+        System.out.printf("| %-6s | %-35s | %-12.2f |\n", kode, nama, harga);
     }
 }

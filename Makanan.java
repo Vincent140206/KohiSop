@@ -25,11 +25,12 @@ public class Makanan extends Menu {
 
     public static void tampilkanDaftarMakanan() {
         System.out.println("Daftar Makanan:");
-        System.out.printf("%-10s %-35s %-10s\n", "Kode", "Nama", "Harga");
-        System.out.println("----------------------------------------------------------");
+        System.out.println("+--------+-------------------------------------+--------------+");
+    System.out.printf("| %-6s | %-35s | %-12s |\n", "Kode", "Menu Makanan", "Harga (Rp)");
+    System.out.println("|--------+-------------------------------------+--------------|");
         for (Makanan makanan : daftarMakanan) {
             makanan.tampilkanMenu();
-        }
-        System.out.println();
+        }   
+    System.out.println("+--------+-------------------------------------+--------------+");
     }
 }

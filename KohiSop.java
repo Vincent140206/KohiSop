@@ -1,4 +1,3 @@
-
 import java.util.*;
 
 public class KohiSop { 
@@ -91,17 +90,24 @@ public class KohiSop {
             System.out.println("Masukkan kode minuman (atau 'CC' untuk membatalkan)");
             System.out.print("Jika sudah selesai, masukan 'Selesai': ");
             String kodeMinuman = scanner.nextLine().trim();
-
+        
             if (kodeMinuman.equalsIgnoreCase("CC")) {
                 System.out.println("Pesanan dibatalkan.");
                 return;
             }
-
+        
             if (kodeMinuman.equalsIgnoreCase("selesai")) {
                 System.out.println("Anda telah selesai memilih minuman.");
                 break;
             }
-
+        
+            if (kodeMinuman.equalsIgnoreCase("0")) {
+                S.move(0, -70);
+                System.out.println("Pesanan dibatalkan");
+                S.delay(1000);
+                break;
+            }
+        
             boolean valid = false;
             for (Minuman minuman : Minuman.daftarMinuman) {
                 if (minuman.getKode().equalsIgnoreCase(kodeMinuman)) {
@@ -110,25 +116,25 @@ public class KohiSop {
                     break;
                 }
             }
-
+        
             if (!valid) {
                 S.move(0, -70);
                 System.out.println("Kode minuman tidak valid. Silakan coba lagi.");
                 S.delay(2000);
                 continue;
             }
-
+        
             System.out.print("Masukkan jumlah (0 untuk batal, 'S' untuk skip): ");
             String inputKuantitas = scanner.nextLine().trim();
             int kuantitas = 1; 
-
+        
             if (inputKuantitas.equals("0")) {
                 S.move(0, -70);
                 System.out.println("Pesanan dibatalkan");
                 S.delay(1000);
                 continue;
             }
-
+        
             if (inputKuantitas.equalsIgnoreCase("S")) {
                 continue;
             } else if (!inputKuantitas.isEmpty()) {
@@ -143,19 +149,21 @@ public class KohiSop {
                     continue;
                 }
             }
-
+        
             kuantitasMinuman.add(kuantitas);
         }
-
+        
         S.clear();
         double totalMinuman = 0;
         double totalMakanan = 0;
         double totalPajakMinuman = 0;
         double totalPajakMakanan = 0;
 
-        System.out.println("\nKuitansi Pesanan:");
-        System.out.println("-------------------------------------------------------------------------------");
-        System.out.printf("%-10s %-30s %-10s %-10s %-10s\n", "Kode", "Nama", "Kuantitas", "Harga", "Pajak");
+        S.clear();
+        System.out.println("\nKonfirmasi Pesanan:");
+        System.out.println("-----------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%-10s %-40s %-20s %-30s %-15s\n", "Kode", "Nama", "Kuantitas", "Harga", "Pajak");
+        System.out.println("-----------------------------------------------------------------------------------------------------------------");
         
         for (int i = 0; i < pesananMinuman.size(); i++) {
             String kode = pesananMinuman.get(i);
@@ -166,7 +174,7 @@ public class KohiSop {
                     double pajak = hitungPajak(minuman.getHarga(), true);
                     totalMinuman += harga;
                     totalPajakMinuman += pajak;
-                    System.out.printf("%-10s %-30s %-10d %-10.2f %-10.2f\n", kode.toUpperCase(), minuman.getNama(), kuantitas, harga, pajak);
+                    System.out.printf("%-10s %-40s %-20d %-30.2f %-15.2f\n", kode.toUpperCase(), minuman.getNama(), kuantitas, harga, pajak);
                 }
             }
         }
@@ -180,7 +188,7 @@ public class KohiSop {
                     double pajak = hitungPajak(makanan.getHarga(), false);
                     totalMakanan += harga;
                     totalPajakMakanan += pajak;
-                    System.out.printf("%-10s %-30s %-10d %-10.2f %-10.2f\n", kode.toUpperCase(), makanan.getNama(), kuantitas, harga, pajak);
+                    System.out.printf("%-10s %-40s %-20d %-30.2f %-15.2f\n", kode.toUpperCase(), makanan.getNama(), kuantitas, harga, pajak);
                 }
             }
         }
@@ -188,23 +196,28 @@ public class KohiSop {
         double totalPajak = totalPajakMinuman + totalPajakMakanan;
         double totalSetelahPajak = totalSebelumPajak + totalPajak;
 
-        System.out.println("-------------------------------------------------------------------------------");
-        System.out.printf("Total Sebelum Pajak: %.2f IDR\n", totalSebelumPajak);
-        System.out.printf("Total Pajak: %.2f IDR\n", totalPajak);
-        System.out.printf("Total Setelah Pajak: %.2f IDR\n", totalSetelahPajak);
+        System.out.println("-----------------------------------------------------------------------------------------------------------------");
+        System.out.println();
+        System.out.printf("Total Sebelum Pajak    : %.2f IDR\n", totalSebelumPajak);
+        System.out.printf("Total Pajak            : %.2f IDR\n", totalPajak);
+        System.out.printf("Total Setelah Pajak    : %.2f IDR\n", totalSetelahPajak);
 
         Payment payment = null;
-        while (true) {
-            System.out.print("Pilih metode pembayaran (1. Tunai, 2. QRIS, 3. eMoney): ");
+        while (true) { 
+            System.out.println("\nPilih metode pembayaran: ");
+            System.out.println("1. Tunai");
+            System.out.println("2. QRIS");
+            System.out.println("3. eMoney");
+            System.out.print("Pilihan Anda: ");
             String input = scanner.nextLine().trim();
 
             try {
                 int pilihan = Integer.parseInt(input); 
 
                 switch (pilihan) {
-                    case 1 -> payment = new ITunai();
-                    case 2 -> payment = new IQRIS();
-                    case 3 -> payment = new IeMoney();
+                    case 1 -> payment = new Tunai();
+                    case 2 -> payment = new QRIS();
+                    case 3 -> payment = new eMoney();
                     default -> {
                         System.out.println("Pilihan tidak valid. Silakan coba lagi.");
                         continue; 
@@ -222,13 +235,68 @@ public class KohiSop {
         }
 
         double totalBayar = payment.hitungTotal(totalSetelahPajak);
-        System.out.println("Total yang harus dibayar: " + totalBayar + " IDR");
+        System.out.printf("\nTotal yang harus dibayar            : %.2f IDR\n", totalBayar);
         System.out.print("Pilih mata uang (USD, JPY, MYR, EUR): ");
-        String mataUang = scanner.nextLine().trim().toUpperCase();
 
-        double totalConvert = MataUang.konversiKeIDR(totalBayar, mataUang);
-        System.out.println("Total dalam " + mataUang + ": " + totalConvert);
-        System.out.println("Terima kasih atas pesanan Anda!");
+        String mataUang = scanner.nextLine().trim().toUpperCase();
+        while (!MataUang.cekValid(mataUang)) {
+            System.out.print("Mata uang tidak valid. Silakan pilih mata uang (USD, JPY, MYR, EUR): ");
+            mataUang = scanner.nextLine().trim().toUpperCase();
+        }
+
+        double totalConvert = MataUang.konversi(totalBayar, mataUang);
+        String simbol = MataUang.getSimbolMataUang(mataUang);
+        System.out.printf("Total dalam %s: %s%,.2f\n", mataUang, simbol, totalConvert);
+        
+        S.clear();
+        System.out.println("================= KUITANSI PEMBAYARAN =================");
+        System.out.println("-------------------------------------------------------");
+        System.out.printf("%-6s %-20s %-6s %-10s %-8s\n", "Kode", "Nama", "Qty", "Harga", "Pajak");
+        System.out.println("-------------------------------------------------------");
+
+        for (int i = 0; i < pesananMakanan.size(); i++) {
+            String kode = pesananMakanan.get(i);
+            int qty = kuantitasMakanan.get(i);
+            for (Makanan makanan : Makanan.daftarMakanan) {
+                if (makanan.getKode().equalsIgnoreCase(kode)) {
+                    double harga = makanan.getHarga() * qty;
+                    double pajak = hitungPajak(makanan.getHarga(), false);
+                    System.out.printf("%-6s %-20s %-6d %-10.2f %-8.2f\n", kode.toUpperCase(), potong(makanan.getNama()), qty, harga, pajak);
+                }
+            }
+        }
+
+        for (int i = 0; i < pesananMinuman.size(); i++) {
+            String kode = pesananMinuman.get(i);
+            int qty = kuantitasMinuman.get(i);
+            for (Minuman minuman : Minuman.daftarMinuman) {
+                if (minuman.getKode().equalsIgnoreCase(kode)) {
+                    double harga = minuman.getHarga() * qty;
+                    double pajak = hitungPajak(minuman.getHarga(), true);
+                    System.out.printf("%-6s %-20s %-6d %-10.2f %-8.2f\n", kode.toUpperCase(), potong(minuman.getNama()), qty, harga, pajak);
+                }
+            }
+        }
+
+        double convertSblm = MataUang.konversi(totalSebelumPajak, mataUang);
+        double admin = MataUang.konversi(payment.getBiayaAdmin(), mataUang);
+        double diskon = payment.getDiskon() * 100;
+
+        System.out.println("-------------------------------------------------------");
+        System.out.printf("%-41s:    %s%,.2f\n", "Total Sebelum Pajak", simbol, convertSblm);
+        System.out.printf("%-41s:    %s%,.2f\n", "Total Setelah Pajak", MataUang.getSimbolMataUang(mataUang), totalConvert);
+        System.out.println("-------------------------------------------------------");
+        System.out.printf("%-41s:    %s\n", "Metode Pembayaran", payment.getNamaMetode());
+        System.out.printf("%-41s:    %s\n", "Mata Uang", mataUang);
+        System.out.printf("%-41s:    %.0f%%\n", "Diskon Pembayaran", diskon);
+        System.out.printf("%-41s:    %s\n", "Biaya Admin", mataUang);
+        
+        System.out.printf("Total dalam %s sebelum diskon dan admin :    %s%,.2f\n", mataUang, simbol, totalConvert);
+        System.out.printf("Total dalam %s sesudah diskon dan admin :    %s%,.2f\n", mataUang, simbol, totalConvert + admin + (diskon / 100));
+        System.out.println("-------------------------------------------------------");
+        System.out.printf("%-41s:    %s%,.2f\n","Total yang harus dibayar", simbol, totalConvert + admin + (diskon / 100));
+        System.out.println("-------------------------------------------------------");
+        System.out.println("Terima kasih dan silakan datang kembali!");
     }
 
     private static double hitungPajak(double harga, boolean isMinuman) {
@@ -248,4 +316,9 @@ public class KohiSop {
             }
         }
     }
+
+    public static String potong(String nama) {
+        return nama.length() > 20 ? nama.substring(0, 17) + "..." : nama;
+    }
+    
 }
