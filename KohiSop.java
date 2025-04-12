@@ -239,13 +239,13 @@ public class KohiSop {
         System.out.print("Pilih mata uang (USD, JPY, MYR, EUR): ");
 
         String mataUang = scanner.nextLine().trim().toUpperCase();
-        while (!MataUang.cekValid(mataUang)) {
+        while (!IMataUang.cekValid(mataUang)) {
             System.out.print("Mata uang tidak valid. Silakan pilih mata uang (USD, JPY, MYR, EUR): ");
             mataUang = scanner.nextLine().trim().toUpperCase();
         }
 
-        double totalConvert = MataUang.konversi(totalBayar, mataUang);
-        String simbol = MataUang.getSimbolMataUang(mataUang);
+        double totalConvert = IMataUang.konversi(totalBayar, mataUang);
+        String simbol = IMataUang.getSimbolMataUang(mataUang);
         System.out.printf("Total dalam %s: %s%,.2f\n", mataUang, simbol, totalConvert);
         
         S.clear();
@@ -278,13 +278,13 @@ public class KohiSop {
             }
         }
 
-        double convertSblm = MataUang.konversi(totalSebelumPajak, mataUang);
-        double admin = MataUang.konversi(payment.getBiayaAdmin(), mataUang);
+        double convertSblm = IMataUang.konversi(totalSebelumPajak, mataUang);
+        double admin = IMataUang.konversi(payment.getBiayaAdmin(), mataUang);
         double diskon = payment.getDiskon() * 100;
 
         System.out.println("-------------------------------------------------------");
         System.out.printf("%-41s:    %s%,.2f\n", "Total Sebelum Pajak", simbol, convertSblm);
-        System.out.printf("%-41s:    %s%,.2f\n", "Total Setelah Pajak", MataUang.getSimbolMataUang(mataUang), totalConvert);
+        System.out.printf("%-41s:    %s%,.2f\n", "Total Setelah Pajak", IMataUang.getSimbolMataUang(mataUang), totalConvert);
         System.out.println("-------------------------------------------------------");
         System.out.printf("%-41s:    %s\n", "Metode Pembayaran", payment.getNamaMetode());
         System.out.printf("%-41s:    %s\n", "Mata Uang", mataUang);

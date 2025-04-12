@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
 
-public class MataUang {
+public class IMataUang {
     private static final Map<String, Double> nilaiTukar = new HashMap<>();
 
     static {
