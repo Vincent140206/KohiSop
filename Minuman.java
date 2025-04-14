@@ -1,15 +1,16 @@
-import java.util.ArrayList;
-
 public class Minuman extends Menu {
-    public static final ArrayList<Minuman> daftarMinuman = new ArrayList<>();
+    private static final int MAKS_MINUMAN = 10;
+    public static final Minuman[] daftarMinuman = new Minuman[MAKS_MINUMAN];
+    private static int jumlahMinuman = 0;
 
     private Minuman(String kode, String nama, double harga) {
         super(kode, nama, harga);
     }
 
     private static void buatMinuman(String kode, String nama, double harga) {
-        Minuman minuman = new Minuman(kode, nama, harga);
-        daftarMinuman.add(minuman);
+        if (jumlahMinuman < MAKS_MINUMAN) {
+            daftarMinuman[jumlahMinuman++] = new Minuman(kode, nama, harga);
+        }
     }
 
     public static void inisialisasiMenu() {
@@ -30,9 +31,13 @@ public class Minuman extends Menu {
         System.out.println("+--------+-------------------------------------+--------------+");
         System.out.printf("| %-6s | %-35s | %-12s |\n", "Kode", "Menu Minuman", "Harga (Rp)");
         System.out.println("|--------+-------------------------------------+--------------|");
-        for (Minuman minuman : daftarMinuman) {
-            minuman.tampilkanMenu();
+        for (int i = 0; i < jumlahMinuman; i++) {
+            daftarMinuman[i].tampilkanMenu();
         }
         System.out.println("+--------+-------------------------------------+--------------+");
+    }
+
+    public static Minuman[] getDaftarMinuman() {
+            return daftarMinuman;
     }
 }

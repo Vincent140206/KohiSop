@@ -1,4 +1,4 @@
-public class eMoney implements Payment {
+public class eMoney implements IPayment {
 
     @Override
     public double hitungTotal(double totalPesanan) {

@@ -1,4 +1,4 @@
-public class Tunai implements Payment {
+public class Tunai implements IPayment {
     @Override
     public double hitungTotal(double totalPesanan) {
         return totalPesanan - (totalPesanan * getDiskon());

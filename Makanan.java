@@ -1,15 +1,16 @@
-import java.util.ArrayList;
-
 public class Makanan extends Menu {
-    public static final ArrayList<Makanan> daftarMakanan = new ArrayList<>();
+    private static final int MAKS_MAKANAN = 10;
+    public static final Makanan[] daftarMakanan = new Makanan[MAKS_MAKANAN];
+    private static int jumlahMakanan = 0;
 
     private Makanan(String kode, String nama, double harga) {
         super(kode, nama, harga);
     }
 
     private static void buatMakanan(String kode, String nama, double harga) {
-        Makanan makanan = new Makanan(kode, nama, harga);
-        daftarMakanan.add(makanan);
+        if (jumlahMakanan < MAKS_MAKANAN) {
+            daftarMakanan[jumlahMakanan++] = new Makanan(kode, nama, harga);
+        }
     }
 
     public static void inisialisasiMenu() {
@@ -26,11 +27,16 @@ public class Makanan extends Menu {
     public static void tampilkanDaftarMakanan() {
         System.out.println("Daftar Makanan:");
         System.out.println("+--------+-------------------------------------+--------------+");
-    System.out.printf("| %-6s | %-35s | %-12s |\n", "Kode", "Menu Makanan", "Harga (Rp)");
-    System.out.println("|--------+-------------------------------------+--------------|");
-        for (Makanan makanan : daftarMakanan) {
-            makanan.tampilkanMenu();
-        }   
-    System.out.println("+--------+-------------------------------------+--------------+");
+        System.out.printf("| %-6s | %-35s | %-12s |\n", "Kode", "Menu Makanan", "Harga (Rp)");
+        System.out.println("|--------+-------------------------------------+--------------|");
+        for (int i = 0; i < jumlahMakanan; i++) {
+            daftarMakanan[i].tampilkanMenu();
+        }
+        System.out.println("+--------+-------------------------------------+--------------+");
     }
+
+    public static Makanan[] getDaftarMakanan() {
+        return daftarMakanan;
+    }
+    
 }

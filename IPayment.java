@@ -1,4 +1,4 @@
-public interface Payment {
+public interface IPayment {
     double hitungTotal(double totalPesanan);
     boolean cekSaldo(double totalPesanan);
 

@@ -1,4 +1,4 @@
-public class QRIS implements Payment {
+public class QRIS implements IPayment {
 
     @Override
     public double hitungTotal(double totalPesanan) {
