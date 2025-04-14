@@ -12,7 +12,7 @@ public class S {
     } catch (Exception e) {
         System.out.println("Gagal membersihkan layar: " + e.getMessage());
     }
-}
+  }
 
   public static void move(int x, int y) {
     System.out.print(String.format("%c[%d;%df",0x1B,y,x));

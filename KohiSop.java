@@ -12,200 +12,41 @@ public class KohiSop {
         String[] pesananMakanan = new String[MAX_MAKANAN];
         int[] kuantitasMakanan = new int[MAX_MAKANAN];
 
-        int pesanan_minuman = 0;
-        int pesanan_makanan = 0;
-
         Makanan.inisialisasiMenu();
         Minuman.inisialisasiMenu();
 
-        while (pesanan_makanan < MAX_MAKANAN) {
-            S.clear();
-            Makanan.tampilkanDaftarMakanan();
-            System.out.println("Masukkan kode makanan (atau 'CC' untuk membatalkan)");
-            System.out.print("Jika sudah selesai, masukan 'Selesai': ");
-            String kodeMakanan = scanner.nextLine().trim();
+        int pesanan_makanan = InputPesanan.prosesPesanan(
+            scanner,
+            pesananMakanan,
+            kuantitasMakanan,
+            MAX_MAKANAN,
+            MAX_MAKANAN,
+            "Makanan",
+            Makanan.getDaftarMakanan()
+        );
+        if (pesanan_makanan == -1) return;
 
-            if (kodeMakanan.equalsIgnoreCase("CC")) {
-                System.out.println("Pesanan dibatalkan.");
-                return;
-            }
-
-            if (kodeMakanan.equalsIgnoreCase("selesai")) {
-                System.out.println("Anda telah selesai memilih makanan.");
-                break;
-            }
-
-            if (kodeMakanan.equalsIgnoreCase("0")) {
-                S.move(0, -70);
-                System.out.println("Pesanan dibatalkan");
-                S.delay(1000);
-                break;
-            }
-
-            boolean valid = false;
-            for (Makanan makanan : Makanan.getDaftarMakanan()) {
-                if (makanan != null && makanan.getKode().equalsIgnoreCase(kodeMakanan)) {
-                    valid = true;
-                    pesananMakanan[pesanan_makanan] = kodeMakanan;
-                    break;
-                }
-            }
-
-            if (!valid) {
-                S.move(0, -70);
-                System.out.println("Kode makanan tidak valid. Silakan coba lagi.");
-                S.delay(2000);
-                continue;
-            }
-
-            System.out.print("Masukkan jumlah (0 untuk batal, 'S' untuk skip): ");
-            String inputKuantitas = scanner.nextLine().trim();
-            int kuantitas = 1;
-
-            if (inputKuantitas.equals("0")) {
-                S.move(0, -70);
-                System.out.println("Pesanan dibatalkan");
-                S.delay(1000);
-                continue;
-            }
-
-            if (inputKuantitas.equalsIgnoreCase("S")) {
-                continue;
-            } else if (!inputKuantitas.isEmpty()) {
-                try {
-                    kuantitas = Integer.parseInt(inputKuantitas);
-                    if (kuantitas < 0 || kuantitas > MAX_MAKANAN) {
-                        System.out.println("Jumlah tidak valid. Harus antara 0 dan " + MAX_MAKANAN + ".");
-                        continue;
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println("Input tidak valid. Harap masukkan angka.");
-                    continue;
-                }
-            }
-
-            kuantitasMakanan[pesanan_makanan] = kuantitas;
-            pesanan_makanan++;
-        }
-
-        while (pesanan_minuman < MAX_MINUMAN) {
-            S.clear();
-            Minuman.tampilkanDaftarMinuman();
-            System.out.println("Masukkan kode minuman (atau 'CC' untuk membatalkan)");
-            System.out.print("Jika sudah selesai, masukan 'Selesai': ");
-            String kodeMinuman = scanner.nextLine().trim();
-
-            if (kodeMinuman.equalsIgnoreCase("CC")) {
-                System.out.println("Pesanan dibatalkan.");
-                return;
-            }
-
-            if (kodeMinuman.equalsIgnoreCase("selesai")) {
-                System.out.println("Anda telah selesai memilih minuman.");
-                break;
-            }
-
-            if (kodeMinuman.equalsIgnoreCase("0")) {
-                S.move(0, -70);
-                System.out.println("Pesanan dibatalkan");
-                S.delay(1000);
-                break;
-            }
-
-            boolean valid = false;
-            for (Minuman minuman : Minuman.getDaftarMinuman()) {
-                if (minuman != null && minuman.getKode().equalsIgnoreCase(kodeMinuman)) {
-                    valid = true;
-                    pesananMinuman[pesanan_minuman] = kodeMinuman;
-                    break;
-                }
-            }
-
-            if (!valid) {
-                S.move(0, -70);
-                System.out.println("Kode minuman tidak valid. Silakan coba lagi.");
-                S.delay(2000);
-                continue;
-            }
-
-            System.out.print("Masukkan jumlah (0 untuk batal, 'S' untuk skip): ");
-            String inputKuantitas = scanner.nextLine().trim();
-            int kuantitas = 1;
-
-            if (inputKuantitas.equals("0")) {
-                S.move(0, -70);
-                System.out.println("Pesanan dibatalkan");
-                S.delay(1000);
-                continue;
-            }
-
-            if (inputKuantitas.equalsIgnoreCase("S")) {
-                continue;
-            } else if (!inputKuantitas.isEmpty()) {
-                try {
-                    kuantitas = Integer.parseInt(inputKuantitas);
-                    if (kuantitas < 0 || kuantitas > MAX_KUANTITAS_MINUMAN) {
-                        System.out.println("Jumlah tidak valid. Harus antara 0 dan " + MAX_KUANTITAS_MINUMAN + ".");
-                        continue;
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println("Input tidak sesuai. Harap masukan angka");
-                    continue;
-                }
-            }
-
-            kuantitasMinuman[pesanan_minuman] = kuantitas;
-            pesanan_minuman++;
-        }
+        int pesanan_minuman = InputPesanan.prosesPesanan(
+            scanner,
+            pesananMinuman,
+            kuantitasMinuman,
+            MAX_MINUMAN,
+            MAX_KUANTITAS_MINUMAN,
+            "Minuman",
+            Minuman.getDaftarMinuman()
+        );
+        if (pesanan_minuman == -1) return;
 
         S.clear();
-        double totalMinuman = 0;
-        double totalMakanan = 0;
-        double totalPajakMinuman = 0;
-        double totalPajakMakanan = 0;
+        double[] hasil = KonfirmasiPesanan.tampilkan(
+            pesananMakanan, kuantitasMakanan, pesanan_makanan,
+            pesananMinuman, kuantitasMinuman, pesanan_minuman
+        );
 
-        System.out.println("\nKonfirmasi Pesanan:");
-        System.out.println("-----------------------------------------------------------------------------------------------------------------");
-        System.out.printf("%-10s %-40s %-20s %-30s %-15s\n", "Kode", "Nama", "Kuantitas", "Harga", "Pajak");
-        System.out.println("-----------------------------------------------------------------------------------------------------------------");
-
-        for (int i = 0; i < pesanan_minuman; i++) {
-            String kode = pesananMinuman[i];
-            int kuantitas = kuantitasMinuman[i];
-            for (Minuman minuman : Minuman.getDaftarMinuman()) {
-                if (minuman != null && minuman.getKode().equalsIgnoreCase(kode)) {
-                    double harga = minuman.getHarga() * kuantitas;
-                    double pajak = hitungPajak(minuman.getHarga(), true);
-                    totalMinuman += harga;
-                    totalPajakMinuman += pajak;
-                    System.out.printf("%-10s %-40s %-20d %-30.2f %-15.2f\n", kode.toUpperCase(), minuman.getNama(), kuantitas, harga, pajak);
-                }
-            }
-        }
-
-        for (int i = 0; i < pesanan_makanan; i++) {
-            String kode = pesananMakanan[i];
-            int kuantitas = kuantitasMakanan[i];
-            for (Makanan makanan : Makanan.getDaftarMakanan()) {
-                if (makanan != null && makanan.getKode().equalsIgnoreCase(kode)) {
-                    double harga = makanan.getHarga() * kuantitas;
-                    double pajak = hitungPajak(makanan.getHarga(), false);
-                    totalMakanan += harga;
-                    totalPajakMakanan += pajak;
-                    System.out.printf("%-10s %-40s %-20d %-30.2f %-15.2f\n", kode.toUpperCase(), makanan.getNama(), kuantitas, harga, pajak);
-                }
-            }
-        }
-
-        double totalSebelumPajak = totalMinuman + totalMakanan;
-        double totalPajak = totalPajakMinuman + totalPajakMakanan;
-        double totalSetelahPajak = totalSebelumPajak + totalPajak;
-
-        System.out.println("-----------------------------------------------------------------------------------------------------------------");
-        System.out.println();
-        System.out.printf("Total Sebelum Pajak    : %.2f IDR\n", totalSebelumPajak);
-        System.out.printf("Total Pajak            : %.2f IDR\n", totalPajak);
-        System.out.printf("Total Setelah Pajak    : %.2f IDR\n", totalSetelahPajak);
+        double totalMakanan = hasil[0];
+        double totalMinuman = hasil[1];
+        double totalSebelumPajak = totalMakanan + totalMinuman;
+        double totalSetelahPajak = hasil[2];
 
         IPayment payment = null;
         while (true) {
@@ -233,8 +74,8 @@ public class KohiSop {
             }
         }
 
-        if (!payment.cekSaldo(totalSetelahPajak)) {
-            System.out.println("Saldo tidak cukup untuk melakukan pembayaran.");
+        if (payment == null || !payment.cekSaldo(totalSetelahPajak)) {
+            System.out.println("Saldo tidak cukup untuk melakukan pembayaran atau metode pembayaran tidak valid.");
             return;
         }
 
@@ -253,58 +94,14 @@ public class KohiSop {
         System.out.printf("Total dalam %s: %s%,.2f\n", mataUang, simbol, totalConvert);
 
         S.clear();
-        System.out.println("================= KUITANSI PEMBAYARAN =================");
-        System.out.println("-------------------------------------------------------");
-        System.out.printf("%-6s %-20s %-6s %-10s %-8s\n", "Kode", "Nama", "Qty", "Harga", "Pajak");
-        System.out.println("-------------------------------------------------------");
-
-        for (int i = 0; i < pesanan_makanan; i++) {
-            String kode = pesananMakanan[i];
-            int qty = kuantitasMakanan[i];
-
-            for (Makanan makanan : Makanan.getDaftarMakanan()) {
-                if (makanan != null && makanan.getKode().equalsIgnoreCase(kode)) {
-                    double harga = makanan.getHarga() * qty;
-                    double pajak = hitungPajak(makanan.getHarga(), false);
-                    System.out.printf("%-6s %-20s %-6d %-10.2f %-8.2f\n", kode.toUpperCase(), potong(makanan.getNama()), qty, harga, pajak);
-                }
-            }
-        }
-        
-
-        for (int i = 0; i < pesanan_minuman; i++) {
-            String kode = pesananMinuman[i];
-            int qty = kuantitasMinuman[i];
-            for (Minuman minuman : Minuman.daftarMinuman) {
-                if (minuman.getKode().equalsIgnoreCase(kode)) {
-                    double harga = minuman.getHarga() * qty;
-                    double pajak = hitungPajak(minuman.getHarga(), true);
-                    System.out.printf("%-6s %-20s %-6d %-10.2f %-8.2f\n", kode.toUpperCase(), potong(minuman.getNama()), qty, harga, pajak);
-                }
-            }
-        }
-
-        double convertSblm = MataUang.konversi(totalSebelumPajak, mataUang);
-        double admin = MataUang.konversi(payment.getBiayaAdmin(), mataUang);
-        double diskon = payment.getDiskon() * 100;
-
-        System.out.println("-------------------------------------------------------");
-        System.out.printf("%-41s:    %s%,.2f\n", "Total Sebelum Pajak", simbol, convertSblm);
-        System.out.printf("%-41s:    %s%,.2f\n", "Total Setelah Pajak", simbol, totalConvert);
-        System.out.println("-------------------------------------------------------");
-        System.out.printf("%-41s:    %s\n", "Metode Pembayaran", payment.getNamaMetode());
-        System.out.printf("%-41s:    %s\n", "Mata Uang", mataUang);
-        System.out.printf("%-41s:    %.0f%%\n", "Diskon Pembayaran", diskon);
-        System.out.printf("%-41s:    %s\n", "Biaya Admin", mataUang);
-        System.out.printf("Total dalam %s sebelum diskon dan admin :    %s%,.2f\n", mataUang, simbol, totalConvert);
-        System.out.printf("Total dalam %s sesudah diskon dan admin :    %s%,.2f\n", mataUang, simbol, totalConvert + admin + (diskon / 100));
-        System.out.println("-------------------------------------------------------");
-        System.out.printf("%-41s:    %s%,.2f\n", "Total yang harus dibayar", simbol, totalConvert + admin + (diskon / 100));
-        System.out.println("-------------------------------------------------------");
-        System.out.println("Terima kasih dan silakan datang kembali!");
+        Kuitansi.tampilkan(
+            pesananMakanan, kuantitasMakanan, pesanan_makanan,
+            pesananMinuman, kuantitasMinuman, pesanan_minuman,
+            totalSebelumPajak, totalSetelahPajak, totalConvert, mataUang, payment
+        );
     }
 
-    private static double hitungPajak(double harga, boolean isMinuman) {
+    public static double hitungPajak(double harga, boolean isMinuman) {
         if (isMinuman) {
             if (harga < 50) return 0;
             else if (harga <= 55) return harga * 0.08;
