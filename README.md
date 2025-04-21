@@ -20,13 +20,13 @@ Selamat datang di **KohiSop**, aplikasi **CLI** (Command Line Interface) sederha
 
 1. **Clone Repo**
    ```bash
-   git clone https://github.com/username/kohisop.git
-   cd kohisop
+   git clone https://github.com/Vincent14026/KohiSop.git
+   cd KohiSop
    ```
 
 2. **Compile**
    ```bash
-   javac *.java
+   javac KohiSop.java
    ```
 
 3. **Jalankan**
