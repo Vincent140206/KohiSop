@@ -53,6 +53,6 @@ public class Kuitansi {
         System.out.println("-------------------------------------------------------");
         System.out.printf("%-41s:    %s%,.2f\n", "Total yang harus dibayar", simbol, totalConvert + admin + (diskon / 100));
         System.out.println("-------------------------------------------------------");
-        System.out.println("Terima kasih dan silakan datang kembali!");
+        System.out.println("       Terima kasih dan silakan datang kembali!        ");
     }
 }

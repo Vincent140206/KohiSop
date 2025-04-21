@@ -1,8 +1,8 @@
 import java.util.*;
 
 public class KohiSop {
-    private static final int MAX_MINUMAN = 5;
     private static final int MAX_MAKANAN = 2;
+    private static final int MAX_MINUMAN = 5;
     private static final int MAX_KUANTITAS_MINUMAN = 3;
 
     public static void main(String[] args) {

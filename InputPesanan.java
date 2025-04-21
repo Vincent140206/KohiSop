@@ -1,4 +1,5 @@
-import java.util.*;
+import java.util.Scanner;
+
 public class InputPesanan {
     public static int prosesPesanan(
             Scanner scanner,
@@ -6,7 +7,7 @@ public class InputPesanan {
             int[] daftarQty,
             int maxItem,
             int maxQty,
-            String tipe, // "Makanan" atau "Minuman"
+            String tipe, 
             Menu[] daftarMenu
     ) {
         int totalPesanan = 0;
@@ -30,13 +31,6 @@ public class InputPesanan {
                 break;
             }
 
-            if (kode.equalsIgnoreCase("0")) {
-                S.move(0, -70);
-                System.out.println("Pesanan dibatalkan");
-                S.delay(1000);
-                return -1;
-            }
-
             boolean valid = false;
             for (Menu item : daftarMenu) {
                 if (item != null && item.getKode().equalsIgnoreCase(kode)) {
@@ -46,36 +40,29 @@ public class InputPesanan {
             }
 
             if (!valid) {
-                S.move(0, -70);
                 System.out.println("Kode " + tipe.toLowerCase() + " tidak valid. Silakan coba lagi.");
-                S.delay(2000);
                 continue;
             }
 
-            System.out.print("Masukkan jumlah (0 untuk batal, 'S' untuk skip): ");
+            System.out.print("Masukkan jumlah (0 untuk default 1, 'S' untuk skip): ");
             String inputKuantitas = scanner.nextLine().trim();
-            int kuantitas = 1;
-
-            if (inputKuantitas.equals("0")) {
-                S.move(0, -70);
-                System.out.println("Pesanan dibatalkan");
-                S.delay(1000);
-                continue;
-            }
-
             if (inputKuantitas.equalsIgnoreCase("S")) {
                 continue;
             }
 
+            int kuantitas = 1;  
             try {
-                kuantitas = Integer.parseInt(inputKuantitas);
-                if (kuantitas < 1 || kuantitas > maxQty) {
+                int parsed = Integer.parseInt(inputKuantitas);
+                if (parsed == 0) {
+                    kuantitas = 1;  
+                } else if (parsed > 0 && parsed <= maxQty) {
+                    kuantitas = parsed;
+                } else {
                     System.out.println("Jumlah tidak valid. Harus antara 1 dan " + maxQty + ".");
                     continue;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Input tidak valid. Harap masukkan angka.");
-                continue;
+                System.out.println("Input tidak valid, default kuantitas diatur ke 1.");
             }
 
             daftarKode[totalPesanan] = kode;
