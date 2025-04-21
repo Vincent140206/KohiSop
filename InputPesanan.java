@@ -23,11 +23,13 @@ public class InputPesanan {
 
             if (kode.equalsIgnoreCase("CC")) {
                 System.out.println("Pesanan dibatalkan.");
+                S.delay(2000);
                 return -1;
             }
 
             if (kode.equalsIgnoreCase("selesai")) {
                 System.out.println("Anda telah selesai memilih " + tipe.toLowerCase() + ".");
+                S.delay(2000);
                 break;
             }
 
@@ -41,6 +43,7 @@ public class InputPesanan {
 
             if (!valid) {
                 System.out.println("Kode " + tipe.toLowerCase() + " tidak valid. Silakan coba lagi.");
+                S.delay(2000);
                 continue;
             }
 
@@ -59,10 +62,12 @@ public class InputPesanan {
                     kuantitas = parsed;
                 } else {
                     System.out.println("Jumlah tidak valid. Harus antara 1 dan " + maxQty + ".");
+                    S.delay(2000);
                     continue;
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Input tidak valid, default kuantitas diatur ke 1.");
+                S.delay(2000);
             }
 
             daftarKode[totalPesanan] = kode;
