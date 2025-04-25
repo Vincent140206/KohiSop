@@ -103,11 +103,11 @@ public class KohiSop {
 
     public static double hitungPajak(double harga, boolean isMinuman) {
         if (isMinuman) {
-            if (harga < 50) return 0;
-            else if (harga <= 55) return harga * 0.08;
+            if (harga < 50000) return 0;
+            else if (harga <= 55000) return harga * 0.08;
             else return harga * 0.11;
         } else {
-            return harga > 50 ? harga * 0.08 : harga * 0.11;
+            return harga > 50000 ? harga * 0.08 : harga * 0.11;
         }
     }
 
