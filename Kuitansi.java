@@ -41,6 +41,7 @@ public class Kuitansi {
         }
 
         System.out.println("-------------------------------------------------------");
+        System.out.printf("%-41s:    %s%,.0f\n", "Total Dalam Rupiah ", "Rp", totalSetelahPajak);
         System.out.printf("%-41s:    %s%,.2f\n", "Total Sebelum Pajak", simbol, convertSblm);
         System.out.printf("%-41s:    %s%,.2f\n", "Total Setelah Pajak", simbol, totalConvert);
         System.out.println("-------------------------------------------------------");
