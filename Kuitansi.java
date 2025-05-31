@@ -37,8 +37,8 @@ public class Kuitansi {
         System.out.printf("| Subtotal sebelum pajak                                      : %,14.2f IDR |\n", totalSebelumPajak);
         System.out.printf("| Total pajak                                                 : %,14.2f IDR |\n", totalSetelahPajak - totalSebelumPajak);
         System.out.printf("| Total setelah pajak                                         : %,14.2f IDR |\n", totalSetelahPajak);
-        System.out.printf("| Total dalam %-6s                                          : %12s %.2f |\n", mataUang, MataUang.getSimbolMataUang(mataUang), totalConvert);
-        System.out.printf("| Metode pembayaran                                           : %-18s |\n", payment.getClass().getSimpleName());
+        System.out.printf("| Total dalam %-6s                                          : %13s%.2f |\n", mataUang, MataUang.getSimbolMataUang(mataUang), totalConvert);
+        System.out.printf("| Metode pembayaran                                           : %18s |\n", payment.getClass().getSimpleName());
         System.out.println("+----------------------------------------------------------------------------------+");
         System.out.println("|                             INFORMASI MEMBER                                     |");
         System.out.println("+----------------------------------------------------------------------------------+");
