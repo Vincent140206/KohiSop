@@ -1,21 +1,22 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class InputPesanan {
     public static int prosesPesanan(
             Scanner scanner,
-            String[] daftarKode,
-            int[] daftarQty,
+            ArrayList<String> daftarKode,
+            ArrayList<Integer> daftarQty,
             int maxItem,
             int maxQty,
-            String tipe, 
-            Menu[] daftarMenu
+            String tipe,
+            ArrayList<Menu> daftarMenu
     ) {
-        int totalPesanan = 0;
-
-        while (totalPesanan < maxItem) {
+        while (daftarKode.size() < maxItem) {
             S.clear();
-            if (tipe.equals("Makanan")) Makanan.tampilkanDaftarMakanan();
-            else Minuman.tampilkanDaftarMinuman();
+            if (tipe.equalsIgnoreCase("Makanan")) {
+                Makanan.tampilkanDaftarMakanan();
+            } else {
+                Minuman.tampilkanDaftarMinuman();
+            }
 
             System.out.println("Masukkan kode " + tipe.toLowerCase() + " (atau 'CC' untuk membatalkan)");
             System.out.print("Jika sudah selesai, masukan 'Selesai': ");
@@ -53,11 +54,11 @@ public class InputPesanan {
                 continue;
             }
 
-            int kuantitas = 1;  
+            int kuantitas = 1;
             try {
                 int parsed = Integer.parseInt(inputKuantitas);
                 if (parsed == 0) {
-                    kuantitas = 1;  
+                    kuantitas = 1;
                 } else if (parsed > 0 && parsed <= maxQty) {
                     kuantitas = parsed;
                 } else {
@@ -70,10 +71,9 @@ public class InputPesanan {
                 S.delay(2000);
             }
 
-            daftarKode[totalPesanan] = kode;
-            daftarQty[totalPesanan] = kuantitas;
-            totalPesanan++;
+            daftarKode.add(kode);
+            daftarQty.add(kuantitas);
         }
-        return totalPesanan;
+        return daftarKode.size();
     }
 }

@@ -1,59 +1,55 @@
+import java.util.ArrayList;
+
 public class Kuitansi {
+
     public static void tampilkan(
-        String[] pesananMakanan, int[] kuantitasMakanan, int pesanan_makanan,
-        String[] pesananMinuman, int[] kuantitasMinuman, int pesanan_minuman,
-        double totalSebelumPajak, double totalSetelahPajak,
-        double totalConvert, String mataUang, IPayment payment
-    ) {    
-        double convertSblm = MataUang.konversi(totalSebelumPajak, mataUang);
-        double admin = MataUang.konversi(payment.getBiayaAdmin(), mataUang);
-        double diskon = payment.getDiskon() * 100;
-        String simbol = MataUang.getSimbolMataUang(mataUang);
+            ArrayList<KonfirmasiPesanan.ItemPesanan> daftarItem,
+            double totalSebelumPajak,
+            double totalSetelahPajak,
+            double totalConvert,
+            String mataUang,
+            IPayment payment,
+            Membership member,
+            int poinSebelum,
+            int poinBaru) {
 
-        S.clear();
-        System.out.println("================= KUITANSI PEMBAYARAN =================");
-        System.out.println("-------------------------------------------------------");
-        System.out.printf("%-6s %-20s %-6s %-10s %-8s\n", "Kode", "Nama", "Qty", "Harga", "Pajak");
-        System.out.println("-------------------------------------------------------");
+        System.out.println();
+        System.out.println("+----------------------------------------------------------------------------------+");
+        System.out.println("|                              KUITANSI PESANAN                                    |");
+        System.out.println("+----------------------------------------------------------------------------------+");
+        System.out.println("| Kode  | Nama Produk            | Qty | Harga Satuan | Pajak/Satuan | Total       |");
+        System.out.println("+-------+------------------------+-----+--------------+--------------+-------------+");
 
-        for (int i = 0; i < pesanan_makanan; i++) {
-            String kode = pesananMakanan[i];
-            int qty = kuantitasMakanan[i];
-            for (Makanan makanan : Makanan.getDaftarMakanan()) {
-                if (makanan != null && makanan.getKode().equalsIgnoreCase(kode)) {
-                    double harga = makanan.getHarga() * qty;
-                    double pajak = KohiSop.hitungPajak(makanan.getHarga(), false);
-                    System.out.printf("%-6s %-20s %-6d %-10.2f %-8.2f\n", kode.toUpperCase(), KohiSop.potong(makanan.getNama()), qty, harga, pajak);
-                }
-            }
+        for (KonfirmasiPesanan.ItemPesanan item : daftarItem) {
+            String kode = item.getKode();
+            String nama = KohiSop.potongNama(item.getNama());
+            int qty = item.getKuantitas();
+            double hargaSatuan = item.getHargaSatuan();
+            double pajakSatuan = item.getPajakSatuan();
+            double totalHarga = hargaSatuan * qty;
+            double totalPajak = pajakSatuan * qty;
+
+            System.out.printf("| %-5s | %-22s | %3d | %,12.2f | %,12.2f | %,11.2f |\n",
+                    kode, nama, qty, hargaSatuan, pajakSatuan, totalHarga + totalPajak);
         }
 
-        for (int i = 0; i < pesanan_minuman; i++) {
-            String kode = pesananMinuman[i];
-            int qty = kuantitasMinuman[i];
-            for (Minuman minuman : Minuman.daftarMinuman) {
-                if (minuman.getKode().equalsIgnoreCase(kode)) {
-                    double harga = minuman.getHarga() * qty;
-                    double pajak = KohiSop.hitungPajak(minuman.getHarga(), true);
-                    System.out.printf("%-6s %-20s %-6d %-10.2f %-8.2f\n", kode.toUpperCase(), KohiSop.potong(minuman.getNama()), qty, harga, pajak);
-                }
-            }
-        }
-
-        System.out.println("-------------------------------------------------------");
-        System.out.printf("%-41s:    %s%,.0f\n", "Total Dalam Rupiah ", "Rp", totalSetelahPajak);
-        System.out.printf("%-41s:    %s%,.2f\n", "Total Sebelum Pajak", simbol, convertSblm);
-        System.out.printf("%-41s:    %s%,.2f\n", "Total Setelah Pajak", simbol, totalConvert);
-        System.out.println("-------------------------------------------------------");
-        System.out.printf("%-41s:    %s\n", "Metode Pembayaran", payment.getNamaMetode());
-        System.out.printf("%-41s:    %s\n", "Mata Uang", mataUang);
-        System.out.printf("%-41s:    %.0f%%\n", "Diskon Pembayaran", diskon);
-        System.out.printf("%-41s:    %s\n", "Biaya Admin", mataUang);
-        System.out.printf("Total dalam %s sebelum diskon dan admin :    %s%,.2f\n", mataUang, simbol, totalConvert);
-        System.out.printf("Total dalam %s sesudah diskon dan admin :    %s%,.2f\n", mataUang, simbol, totalConvert + admin + (diskon / 100));
-        System.out.println("-------------------------------------------------------");
-        System.out.printf("%-41s:    %s%,.2f\n", "Total yang harus dibayar", simbol, totalConvert + admin + (diskon / 100));
-        System.out.println("-------------------------------------------------------");
-        System.out.println("       Terima kasih dan silakan datang kembali!        ");
+        System.out.println("+-------+------------------------+-----+--------------+--------------+-------------+");
+        System.out.printf("| Subtotal sebelum pajak                                      : %,14.2f IDR |\n", totalSebelumPajak);
+        System.out.printf("| Total pajak                                                 : %,14.2f IDR |\n", totalSetelahPajak - totalSebelumPajak);
+        System.out.printf("| Total setelah pajak                                         : %,14.2f IDR |\n", totalSetelahPajak);
+        System.out.printf("| Total dalam %-6s                                          : %12s %.2f |\n", mataUang, MataUang.getSimbolMataUang(mataUang), totalConvert);
+        System.out.printf("| Metode pembayaran                                           : %-18s |\n", payment.getClass().getSimpleName());
+        System.out.println("+----------------------------------------------------------------------------------+");
+        System.out.println("|                             INFORMASI MEMBER                                     |");
+        System.out.println("+----------------------------------------------------------------------------------+");
+        System.out.printf("| Nama member                                                     : %-14s |\n", member.getNamaMember());
+        System.out.printf("| Kode member                                                     : %-14s |\n", member.getKodeMember());
+        System.out.printf("| Poin sebelum                                                    : %-14d |\n", poinSebelum);
+        System.out.printf("| Poin didapat                                                    : %-14d |\n", poinBaru);
+        System.out.printf("| Total poin sekarang                                             : %-14d |\n", member.getPoin());
+        System.out.println("+----------------------------------------------------------------------------------+");
+        System.out.println("|                          Terima kasih atas kunjungan Anda!                       |");
+        System.out.println("+----------------------------------------------------------------------------------+");
+        System.out.println();
     }
 }
