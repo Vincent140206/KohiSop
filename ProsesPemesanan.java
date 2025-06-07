@@ -51,10 +51,6 @@ public class ProsesPemesanan {
 
         pelanggan.hitungTotalHarga();
 
-        if (pelanggan.member != null) {
-            pelanggan.poinSebelum = pelanggan.member.getPoin(); 
-        }
-
         // Diskon member
         double diskonPoin = 0;
         if (pelanggan.member != null) {
