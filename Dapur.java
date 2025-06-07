@@ -34,13 +34,13 @@ public class Dapur {
 
         System.out.println("\n=== PROSES TIM DAPUR ===");
 
-        System.out.println(">> Makanan (berdasarkan harga tertinggi):");
+        System.out.println("1. Makanan (berdasarkan harga tertinggi):");
         while (!antrianMakanan.isEmpty()) {
             Menu m = antrianMakanan.poll();
             System.out.println("- " + m.getNama() + " (Rp " + String.format("%,.2f", m.getHarga()) + ")");
         }
 
-        System.out.println("\n>> Minuman (yang terakhir dipesan diproses dulu):");
+        System.out.println("\n2. Minuman (yang terakhir dipesan diproses dulu):");
         while (!tumpukanMinuman.isEmpty()) {
             Menu m = tumpukanMinuman.pop();
             System.out.println("- " + m.getNama() + " (Rp " + String.format("%,.2f", m.getHarga()) + ")");

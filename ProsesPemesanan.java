@@ -51,6 +51,30 @@ public class ProsesPemesanan {
 
         pelanggan.hitungTotalHarga();
 
+        if (pelanggan.member != null) {
+            pelanggan.poinSebelum = pelanggan.member.getPoin(); 
+        }
+
+        // Diskon member
+        double diskonPoin = 0;
+        if (pelanggan.member != null) {
+            int totalPoin = pelanggan.member.getPoin();
+            double nilaiPoin = totalPoin * 2000;
+
+            if (nilaiPoin >= pelanggan.totalSetelahPajak) {
+                int poinTerpakai = (int) Math.ceil(pelanggan.totalSetelahPajak / 2000.0);
+                diskonPoin = poinTerpakai * 2000;
+                pelanggan.member.kurangiPoin(poinTerpakai);
+                pelanggan.totalSetelahPajak = 0;
+            } 
+
+            System.out.printf("Diskon dari poin: -%,.0f IDR\n", diskonPoin);
+        }
+
+        pelanggan.prosesPoin(); 
+        pelanggan.poinBaru = pelanggan.member.getPoin() - (pelanggan.poinSebelum - pelanggan.poinTerpakai);
+
+
         pelanggan.payment = prosesMetodePembayaran(scanner, pelanggan.totalSetelahPajak);
         if (pelanggan.payment == null) {
             System.out.println("Pembayaran gagal untuk pelanggan ke-" + nomorPelanggan);
@@ -67,11 +91,9 @@ public class ProsesPemesanan {
 
         pelanggan.prosesPoin();
 
-        S.clear();
-
-        System.out.println("\n" + "=".repeat(40));
-        System.out.println("KUITANSI PELANGGAN KE-" + nomorPelanggan);
-        System.out.println("=".repeat(40));
+        System.out.println("\n" + "=".repeat(100));
+        System.out.println(" ".repeat(27) + "KUITANSI PELANGGAN KE-" + nomorPelanggan);
+        System.out.println("=".repeat(100));
         
         Kuitansi.tampilkan(
             pelanggan.daftarItem,
@@ -82,7 +104,8 @@ public class ProsesPemesanan {
             pelanggan.payment,
             pelanggan.member,
             pelanggan.poinSebelum,
-            pelanggan.poinBaru
+            pelanggan.poinBaru,
+            pelanggan.poinTerpakai
         );
 
         return true;

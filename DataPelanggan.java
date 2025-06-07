@@ -14,6 +14,7 @@ public class DataPelanggan {
     public double totalConvert;
     public String mataUang;
     public int poinSebelum;
+    public int poinTerpakai;
     public int poinBaru;
     public int totalQty;
     public int nomorPelanggan;

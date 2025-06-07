@@ -11,7 +11,9 @@ public class Kuitansi {
             IPayment payment,
             Membership member,
             int poinSebelum,
-            int poinBaru) {
+            int poinBaru,
+            int poinTerpakai
+    ) {
 
         System.out.println();
         System.out.println("+----------------------------------------------------------------------------------+");
@@ -46,6 +48,7 @@ public class Kuitansi {
         System.out.printf("| Kode member                                                     : %-14s |\n", member.getKodeMember());
         System.out.printf("| Poin sebelum                                                    : %-14d |\n", poinSebelum);
         System.out.printf("| Poin didapat                                                    : %-14d |\n", poinBaru);
+        System.out.printf("| Poin Terapakai                                                  : %-14d |\n", poinTerpakai);
         System.out.printf("| Total poin sekarang                                             : %-14d |\n", member.getPoin());
         System.out.println("+----------------------------------------------------------------------------------+");
         System.out.println("|                          Terima kasih atas kunjungan Anda!                       |");

@@ -34,6 +34,10 @@ public class Membership {
         this.poin += poinBaru;
     }
 
+    public void kurangiPoin(int jumlah) {
+        this.poin = Math.max(0, this.poin - jumlah);
+    }
+
     private String buatKodeAcak() {
         String karakter = "ABCDEF0123456789";
         Random random = new Random();
@@ -59,30 +63,29 @@ public class Membership {
         System.out.println("+----------------------------------+");
         System.out.println("| Nama     | Kode Member | Poin    |");
         System.out.println("+----------+-------------+---------+");
-        System.out.println("| Pinsen   | A1B2C3      | 12 poin |");
+        System.out.println("| Pinsen   | A1B2C3      | 20 poin |");
         System.out.println("| Ayaya    | B4C5D6      | 10 poin |");
         System.out.println("+----------+-------------+---------+");
         System.out.println();
 
-        System.out.print("Masukkan kode member (kosong jika baru): ");
-        String kodeMember = scanner.nextLine().trim();
+        Membership member = null;
 
-        String namaPembeli;
-        Membership member;
+        while (member == null) {
+            System.out.print("Masukkan kode member (kosong jika baru): ");
+            String kodeMember = scanner.nextLine().trim();
 
-        if (kodeMember.isEmpty()) {
-            System.out.print("Masukkan nama pembeli: ");
-            namaPembeli = scanner.nextLine().trim();
-            member = new Membership(namaPembeli);
-        } else {
-            Membership ditemukan = db.cariMember(kodeMember);
-            if (ditemukan == null) {
-                System.out.println("Kode member tidak ditemukan. Program berhenti.");
-                System.exit(0); 
-                return null;
+            if (kodeMember.isEmpty()) {
+                System.out.print("Masukkan nama pembeli: ");
+                String namaPembeli = scanner.nextLine().trim();
+                member = new Membership(namaPembeli);
+            } else {
+                Membership ditemukan = db.cariMember(kodeMember);
+                if (ditemukan != null) {
+                    member = ditemukan;
+                } else {
+                    System.out.println("Kode member tidak ditemukan. Silakan coba lagi.\n");
+                }
             }
-            namaPembeli = ditemukan.getNamaMember();
-            member = ditemukan;
         }
 
         return member;
