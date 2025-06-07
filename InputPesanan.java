@@ -11,7 +11,7 @@ public class InputPesanan {
             ArrayList<Menu> daftarMenu
     ) {
         while (daftarKode.size() < maxItem) {
-            S.clear();
+            
             if (tipe.equalsIgnoreCase("Makanan")) {
                 Makanan.tampilkanDaftarMakanan();
             } else {
